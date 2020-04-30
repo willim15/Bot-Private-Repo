@@ -1,0 +1,87 @@
+Mechanize Scratch Paper
+
+(SOURCEFORGE DESCRIPTIONS)
+mechanize.Browser is a subclass of mechanize.UserAgentBase, 
+Easy HTML form filling, using ClientForm interface.
+Convenient link parsing and following.
+Browser history (.back() and .reload() methods).
+The Referer HTTP header is added properly (optional).
+
+Automatic observance of robots.txt
+Automatic handling of HTTP-Equiv and Refresh
+
+-------------------------------------------------------------
+UserAgent vs UserAgentBase
+mechanize.UserAgent is a trivial subclass of mechanize.UserAgentBase, adding just one method, .set_seekable_responses() (see the documentation on seekable responses).
+-------------------------------------------------------------
+
+mechanize works with Python 2.4, Python 2.5, and Python 2.6.
+****This might be a problem because we might want to use newer libraries. Also dependency issues might arise
+
+
+CHEAT SHEET TO CREATE A BROWSER
+import mechanize
+br = mechanize.Browser()
+br.set_all_readonly(False)    # allow everything to be written to
+br.set_handle_robots(False)   # ignore robots
+br.set_handle_refresh(False)  # can sometimes hang without this
+br.addheaders =   	      	# [('User-agent', 'Firefox')]
+
+
+OPEN A WEB PAGE
+response = br.open(url)
+print response.read()      # the text of the page
+response1 = br.response()  # get the response again
+print response1.read()     # can apply lxml.html.fromstring()
+
+USING FORMS
+List the forms that are in the page
+for form in br.forms():
+    print "Form name:", form.name
+    print form
+To go on the mechanize browser object must have a form selected
+br.select_form("form1")         # works when form has a name
+br.form = list(br.forms())[0]  # use when form is unnamed
+
+USING CONTROLS
+Iterate through the controls in the form.
+for control in br.form.controls:
+    print control
+    print "type=%s, name=%s value=%s" % (control.type, control.name, br[control.name])
+Controls can be found by name
+control = br.form.find_control("controlname")
+
+if control.type == "select":  # means it's class ClientForm.SelectControl
+    for item in control.items:
+    print " name=%s values=%s" % (item.name, str([label.text  for label in item.get_labels()]))
+
+
+print control.value
+print control  # selected value is starred
+control.value = ["ItemName"]
+print control
+br[control.name] = ["ItemName"]  # equivalent and more normal
+
+if control.type == "text":  # means it's class ClientForm.TextControl
+    control.value = "stuff here"
+br["controlname"] = "stuff here"  # equivalent
+Controls can be set to readonly and disabled.
+control.readonly = False
+control.disabled = True
+
+for control in br.form.controls:
+   if control.type == "submit":
+       control.disabled = True
+
+
+SUBMITTING FORMS
+ 
+response = br.submit()
+print response.read()
+br.back()   # go back
+
+
+
+Sometimes it is easier to get them all and find the link you want from the text.
+for link in br.links():
+    print link.text, link.url
