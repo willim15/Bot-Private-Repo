@@ -1,0 +1,6 @@
+br = mechanicalsoup.StatefulBrowser()
+br.open(...)
+submit = br.page.find('input', id='button3')
+form = br.select_form()
+form.choose_submit(submit)
+br.submit_selected()

@@ -1,0 +1,57 @@
+Looking and Saving some documentation
+
+
+StatefulBrowser
+
+class mechanicalsoup.StatefulBrowser(*args, **kwargs)
+Bases: mechanicalsoup.browser.Browser
+An extension of Browser that stores the browser’s state and provides many convenient functions for interacting
+with HTML elements. It is the primary tool in MechanicalSoup for interfacing with websites.
+Parameters
+
+
+• session – Attach a pre-existing requests Session instead of constructing a new one.
+• soup_config – Configuration passed to BeautifulSoup to affect the way HTML is parsed.
+
+
+Defaults to {'features': 'lxml'}. If overriden, it is highly recommended to specify a parser. Otherwise, BeautifulSoup will issue a warning and pick one for you, but the
+parser it chooses may be different on different machines.
+• requests_adapters – Configuration passed to requests, to affect the way HTTP requests are performed.
+• raise_on_404 – If True, raise LinkNotFoundError when visiting a page triggers a
+404 Not Found error.
+• user_agent – Set the user agent header to this value
+
+BROWSER
+class mechanicalsoup.Browser(session=None, soup_config={’features’: ’lxml’}, requests_adapters=None, raise_on_404=False, user_agent=None)
+
+
+Builds a low-level Browser.
+It is recommended to use StatefulBrowser for most applications, since it offers more advanced features and conveniences than Browser. 
+
+MechanicalSoup is designed to simulate the behavior of a human using a web browser. Possible use-case include:
+• Interacting with a website that doesn’t provide a webservice API, out of a browser.
+• Testing a website you’re developing
+There are also situations when you should not use MechanicalSoup, like:
+• If the website provides a webservice API (e.g. REST), then you should use this API and you don’t need
+MechanicalSoup.
+• If the website you’re interacting with does not contain HTML pages, then MechanicalSoup won’t bring anything
+compared to requests, so just use requests instead.
+• If the website relies on JavaScript, then you probably need a fully-fledged browser. Selenium may help you
+there, but it’s a far heavier solution than MechanicalSoup.
+• If the website is specifically designed to interact with humans, please don’t go against the will of the website’s
+owner
+
+
+
+https://readthedocs.org/projects/mechanicalsoup/downloads/pdf/latest/
+
+Since MechanicalSoup uses BeautifulSoup under the hood, you can uniquely select any element on the page using its
+many convenient search functions, e.g. .find() and .select(). Then you can pass that element to choose_submit()
+or submit_selected(), assuming it is a valid submit element
+
+br = mechanicalsoup.StatefulBrowser()
+br.open(...)
+submit = br.page.find('input', id='button3')
+form = br.select_form()
+form.choose_submit(submit)
+br.submit_selected()

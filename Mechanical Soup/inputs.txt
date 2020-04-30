@@ -1,0 +1,12 @@
+<input name="custname" value="Me"/>
+<input name="custtel" type="tel" value="00 00 0001"/>
+<input name="custemail" type="email" value="nobody@example.com"/>
+<input name="size" type="radio" value="small"/>
+<input checked="" name="size" type="radio" value="medium"/>
+<input name="size" type="radio" value="large"/>
+<input checked="" name="topping" type="checkbox" value="bacon"/>
+<input checked="" name="topping" type="checkbox" value="cheese"/>
+<input name="topping" type="checkbox" value="onion"/>
+<input name="topping" type="checkbox" value="mushroom"/>
+<input max="21:00" min="11:00" name="delivery" step="900" type="time"/>
+<textarea name="comments">This pizza looks really good :-)</textarea>
